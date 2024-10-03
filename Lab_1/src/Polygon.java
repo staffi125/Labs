@@ -1,11 +1,10 @@
 import java.util.ArrayList;
 
 /**
- * Клас Polygon представляє багатокутник, який визначається списком вершин.
- * Вершини задаються як об'єкти класу Point. Клас містить методи для обчислення
- * периметра, площі, центру мас, радіусів вписаного та описаного кіл багатокутника.
+ * Клас Polygon представляє багатокутник, який успадковує абстрактний клас Shape.
+ * Визначає методи для обчислення периметра, площі, центру мас, а також підтримує трансляцію вершин.
  */
-public class Polygon {
+public class Polygon extends Shape {
 
     private ArrayList<Point> vertices;
 
@@ -25,6 +24,7 @@ public class Polygon {
      *
      * @return периметр багатокутника
      */
+    @Override
     public double calculatePerimeter() {
         double perimeter = 0;
         for (int i = 0; i < vertices.size(); i++) {
@@ -42,6 +42,7 @@ public class Polygon {
      *
      * @return площа багатокутника
      */
+    @Override
     public double calculateArea() {
         double area = 0;
         for (int i = 0; i < vertices.size(); i++) {
@@ -72,7 +73,6 @@ public class Polygon {
         cy = cy / (6 * area);
         return new Point(cx, cy);
     }
-
     /**
      * Обчислює радіус описаного кола (коло, яке проходить через усі вершини багатокутника)
      * для правильного багатокутника.
@@ -87,6 +87,18 @@ public class Polygon {
         Point centroid = calculateCentroid();
         return centroid.distanceTo(vertices.get(0)); // Відстань від центру до першої вершини
     }
+    /**
+     * Переміщує (транслює) всі вершини багатокутника на задані відстані по осях X і Y.
+     *
+     * @param dx відстань для переміщення по осі X
+     * @param dy відстань для переміщення по осі Y
+     */
+    @Override
+    public void translate(double dx, double dy) {
+        for (Point vertex : vertices) {
+            vertex.translate(dx, dy);
+        }
+    }
 
     /**
      * Обчислює радіус вписаного кола (коло, яке торкається всіх сторін багатокутника)
@@ -99,6 +111,10 @@ public class Polygon {
         double area = calculateArea();
         double perimeter = calculatePerimeter();
         return (2 * area) / perimeter;
+    }
+
+    public ArrayList<Point> getVertices() {
+        return vertices;
     }
 
     /**
